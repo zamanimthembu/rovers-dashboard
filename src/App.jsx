@@ -1,17 +1,19 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import MatchHeader from "./components/MatchHeader";
+import TeamKpis from "./components/TeamKpis";
+import PlayersTable from "./components/PlayersTable";
 
-function App() {
-  const [count, setCount] = useState(0)
+import roversData from "./data/rovers_vc_game1_clean.json";
+
+export default function App() {
+  const players = (roversData.player_stats || []).filter((p) => p?.name);
 
   return (
-    
-      <div>
-      <h1>College Rovers – Match Dashboard</h1>
-      </div> 
-  )
-}
+    <div style={{ padding: 16 }}>
+      <MatchHeader title="College Rovers – Match Dashboard" subtitle="vs VC • Game 1" />
 
-export default App
+      <TeamKpis teamKpis={roversData.team_kpis} />
+
+      <PlayersTable players={players} />
+    </div>
+  );
+}
