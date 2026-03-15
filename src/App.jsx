@@ -199,7 +199,10 @@ export default function App() {
               Player Details
             </Typography>
             <Divider sx={{ my: 1.5 }} />
-            <PlayerDetails player={selectedPlayer} />
+            <PlayerDetails
+              player={selectedPlayer}
+              onClearSelection={() => setSelectedPlayer(null)}
+            />
           </Paper>
         </Grid>
 
