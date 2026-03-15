@@ -9,7 +9,8 @@ function isBack(pos) {
   return pos >= 9 && pos <= 15;
 }
 
-export default function PlayersTable({ players }) {
+export default function PlayersTable({ players, onSelectPlayer, selectedPos }) {
+
   const [filter, setFilter] = useState("ALL"); // ALL | FORWARDS | BACKS
 
   const filteredAndSorted = useMemo(() => {
@@ -78,29 +79,38 @@ export default function PlayersTable({ players }) {
                 ? "-"
                 : Math.round(p.perfomance_pct * 100) + "%";
 
-            return (
-              <tr
-                key={p.pos}
-                style={{
-                  fontWeight: isTop3 ? "700" : "400",
-                  background: isTop3 ? "#fff7cc" : "transparent",
-                }}
-              >
-                <td>{p.pos}</td>
-                <td>{p.name}</td>
-                <td>{p.kpi_score ?? "-"}</td>
-                <td>{p.target ?? "-"}</td>
-                <td>{p.time_play ?? "-"}</td>
-                <td>{perfText}</td>
-              </tr>
-            );
+return (
+  <tr
+    key={p.pos}
+    onClick={() => onSelectPlayer?.(p)}
+    style={{
+      cursor: "pointer",
+      fontWeight: isTop3 ? "700" : "400",
+      background:
+        selectedPos === p.pos
+          ? "#dbeafe" // selected row
+          : isTop3
+          ? "#fff7cc" // top 3
+          : "transparent",
+    }}
+  >
+    <td>{p.pos}</td>
+    <td>{p.name}</td>
+    <td>{p.kpi_score ?? "-"}</td>
+    <td>{p.target ?? "-"}</td>
+    <td>{p.time_play ?? "-"}</td>
+    <td>{perfText}</td>
+  </tr>
+);
+
           })}
         </tbody>
       </table>
 
-      <p style={{ marginTop: 8 }}>
+        <p style={{ marginTop: 8 }}>
         <em>Tip:</em> top 3 are highlighted based on the current filter.
       </p>
     </section>
   );
 }
+
