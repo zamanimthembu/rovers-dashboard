@@ -4,7 +4,6 @@ import App from "./App";
 import "./index.css";
 
 import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
-import { alpha } from "@mui/material/styles";
 
 const theme = createTheme({
   palette: {
@@ -38,7 +37,7 @@ const theme = createTheme({
       color: "#a9b8d4",
     },
   },
-  shape: { borderRadius: 18 },
+  shape: { borderRadius: 12 },
   spacing: 8,
   components: {
     MuiCssBaseline: {
@@ -80,11 +79,6 @@ const theme = createTheme({
         root: {
           fontWeight: 700,
           borderRadius: 999,
-          backgroundColor: alpha("#c62828", 0.14),
-          border: "1px solid rgba(198, 40, 40, 0.24)",
-        },
-        deleteIcon: {
-          color: "#f7f9fc",
         },
       },
     },

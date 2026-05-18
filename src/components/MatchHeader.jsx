@@ -1,6 +1,6 @@
-import { Paper, Typography, Box } from "@mui/material";
+import { Paper, Typography, Box, Select, MenuItem, FormControl, InputLabel } from "@mui/material";
 
-export default function MatchHeader({ title, subtitle }) {
+export default function MatchHeader({ title, matches, selectedMatchId, onMatchChange }) {
   return (
     <Paper sx={{ p: 3, position: "relative", overflow: "hidden" }}>
       <Box
@@ -13,10 +13,30 @@ export default function MatchHeader({ title, subtitle }) {
           bgcolor: "primary.main",
         }}
       />
-      <Typography variant="h4">{title}</Typography>
-      <Typography variant="subtitle1" color="text.secondary" sx={{ mt: 0.5 }}>
-        {subtitle}
-      </Typography>
+      <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 2 }}>
+        <Box>
+          <Typography variant="h4">{title}</Typography>
+          <Typography variant="subtitle1" color="text.secondary" sx={{ mt: 0.5 }}>
+            Performance Analytics Dashboard
+          </Typography>
+        </Box>
+
+        <FormControl size="small" sx={{ minWidth: 200 }}>
+          <InputLabel id="match-select-label">Match</InputLabel>
+          <Select
+            labelId="match-select-label"
+            value={selectedMatchId}
+            label="Match"
+            onChange={(e) => onMatchChange(e.target.value)}
+          >
+            {matches.map((m) => (
+              <MenuItem key={m.id} value={m.id}>
+                {m.label}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Box>
     </Paper>
   );
 }
