@@ -92,7 +92,7 @@ export default function PlayerDetails({ player, onClearSelection }) {
     );
   }
 
-  const performancePct = player.perfomance_pct;
+  const performancePct = player.performance_pct;
   const status = getPlayerStatus(performancePct);
   const progressValue = Number.isFinite(performancePct)
     ? Math.min(Math.round(performancePct * 100), 120)
@@ -108,7 +108,7 @@ export default function PlayerDetails({ player, onClearSelection }) {
   ];
   const detailMetrics = Object.entries(player).filter(
     ([key]) =>
-      !["pos", "name", "target", "time_play", "kpi_score", "perfomance_pct"].includes(key)
+      !["pos", "name", "target", "time_play", "kpi_score", "performance_pct"].includes(key)
   );
 
   return (

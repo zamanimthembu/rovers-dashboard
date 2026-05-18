@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import {
   Box,
   Chip,
@@ -62,25 +62,23 @@ function formatPercent(value) {
   return `${Math.round(value * 100)}%`;
 }
 
-export default function PlayersTable({ players, onSelectPlayer, selectedPos }) {
-  const [filter, setFilter] = useState("ALL");
-
+export default function PlayersTable({ players, posFilter, onPosFilterChange, onSelectPlayer, selectedPos }) {
   const filteredAndSorted = useMemo(() => {
     const list = (players || []).filter((p) => p?.name);
 
     const filtered =
-      filter === "FORWARDS"
+      posFilter === "FORWARDS"
         ? list.filter((p) => isForward(p.pos))
-        : filter === "BACKS"
+        : posFilter === "BACKS"
           ? list.filter((p) => isBack(p.pos))
           : list;
 
     return [...filtered].sort((a, b) => {
-      const aPerf = a.perfomance_pct ?? -1;
-      const bPerf = b.perfomance_pct ?? -1;
+      const aPerf = a.performance_pct ?? -1;
+      const bPerf = b.performance_pct ?? -1;
       return bPerf - aPerf;
     });
-  }, [players, filter]);
+  }, [players, posFilter]);
 
   const top3Positions = new Set(filteredAndSorted.slice(0, 3).map((p) => p.pos));
 
@@ -100,9 +98,9 @@ export default function PlayersTable({ players, onSelectPlayer, selectedPos }) {
         </Box>
 
         <ToggleButtonGroup
-          value={filter}
+          value={posFilter}
           exclusive
-          onChange={(_, value) => value && setFilter(value)}
+          onChange={(_, value) => value && onPosFilterChange(value)}
           size="small"
         >
           <ToggleButton value="ALL">All</ToggleButton>
@@ -150,7 +148,7 @@ export default function PlayersTable({ players, onSelectPlayer, selectedPos }) {
 
           <TableBody>
             {filteredAndSorted.map((player) => {
-              const performance = player.perfomance_pct;
+              const performance = player.performance_pct;
               const tone = getPerformanceTone(performance);
               const isSelected = selectedPos === player.pos;
               const isTop3 = top3Positions.has(player.pos);
