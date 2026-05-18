@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "mLJPyeGmvfQ=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\educator\\Documents\\My Software Development Projects\\Projects\\rovers-dashboard\\Rovers.API\\Rovers.API.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\educator\\.nuget\\packages\\microsoft.aspnetcore.openapi\\9.0.14\\microsoft.aspnetcore.openapi.9.0.14.nupkg.sha512",
+    "C:\\Users\\educator\\.nuget\\packages\\microsoft.openapi\\1.6.17\\microsoft.openapi.1.6.17.nupkg.sha512",
+    "C:\\Users\\educator\\.nuget\\packages\\swashbuckle.aspnetcore.swaggerui\\10.1.7\\swashbuckle.aspnetcore.swaggerui.10.1.7.nupkg.sha512"
+  ],
+  "logs": []
+}
