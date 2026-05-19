@@ -1,11 +1,17 @@
+using Microsoft.EntityFrameworkCore;
+using Rovers.API.Data;
 using Rovers.API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
+
+builder.Services.AddDbContext<RoversDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 builder.Services.AddSingleton<PlayerService>();
-builder.Services.AddSingleton<MatchEventService>();
+builder.Services.AddScoped<MatchEventService>();
 
 builder.Services.AddCors(options =>
 {

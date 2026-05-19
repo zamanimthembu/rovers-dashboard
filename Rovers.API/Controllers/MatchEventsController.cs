@@ -16,15 +16,16 @@ namespace Rovers.API.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAll() => Ok(_service.GetAll());
+        public async Task<IActionResult> GetAll() =>
+            Ok(await _service.GetAllAsync());
 
         [HttpPost]
-        public IActionResult Create([FromBody] MatchEventDto dto)
+        public async Task<IActionResult> Create([FromBody] MatchEventDto dto)
         {
             if (string.IsNullOrWhiteSpace(dto.PlayerName) || string.IsNullOrWhiteSpace(dto.EventType))
                 return BadRequest("PlayerName and EventType are required.");
 
-            var created = _service.Add(dto);
+            var created = await _service.AddAsync(dto);
             return CreatedAtAction(nameof(GetAll), new { id = created.Id }, created);
         }
     }
