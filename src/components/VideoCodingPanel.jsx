@@ -83,13 +83,18 @@ export default function VideoCodingPanel({ players }) {
   const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [error, setError] = useState(null);
+  const [loadError, setLoadError] = useState(null);
+  const [submitError, setSubmitError] = useState(null);
 
   useEffect(() => {
     setLoading(true);
     getMatchEvents()
       .then(setEvents)
-      .catch(() => setError("Could not load events. Is the API running?"))
+      .catch(() =>
+        setLoadError(
+          "The backend API is not reachable. Start the .NET API locally (dotnet run in Rovers.API) to enable event coding."
+        )
+      )
       .finally(() => setLoading(false));
   }, []);
 
@@ -98,7 +103,7 @@ export default function VideoCodingPanel({ players }) {
     if (!playerName || !eventType) return;
 
     setSubmitting(true);
-    setError(null);
+    setSubmitError(null);
     setSuccess(false);
 
     try {
@@ -109,12 +114,13 @@ export default function VideoCodingPanel({ players }) {
         notes,
       });
       setEvents((prev) => [created, ...prev]);
+      setLoadError(null);
       setSuccess(true);
       setMatchTime("");
       setNotes("");
       setTimeout(() => setSuccess(false), 3000);
     } catch {
-      setError("Failed to log event. Is the API running on port 5150?");
+      setSubmitError("Failed to log event. Is the API running on port 5150?");
     } finally {
       setSubmitting(false);
     }
@@ -247,7 +253,7 @@ export default function VideoCodingPanel({ players }) {
                 </Alert>
               )}
 
-              {error && (
+              {submitError && (
                 <Alert
                   severity="error"
                   sx={{
@@ -258,7 +264,7 @@ export default function VideoCodingPanel({ players }) {
                     fontSize: "0.82rem",
                   }}
                 >
-                  {error}
+                  {submitError}
                 </Alert>
               )}
 
@@ -317,6 +323,19 @@ export default function VideoCodingPanel({ players }) {
               <Box sx={{ display: "flex", justifyContent: "center", py: 5 }}>
                 <CircularProgress size={24} sx={{ color: "#5a7aaa" }} />
               </Box>
+            ) : loadError ? (
+              <Alert
+                severity="warning"
+                sx={{
+                  bgcolor: "rgba(245,158,11,0.08)",
+                  color: "#f59e0b",
+                  border: "1px solid rgba(245,158,11,0.2)",
+                  borderRadius: 2,
+                  fontSize: "0.82rem",
+                }}
+              >
+                {loadError}
+              </Alert>
             ) : events.length === 0 ? (
               <Box sx={{ textAlign: "center", py: 5 }}>
                 <Typography sx={{ fontSize: "0.85rem", color: "#3d5a80" }}>
