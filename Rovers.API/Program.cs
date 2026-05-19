@@ -5,11 +5,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 builder.Services.AddSingleton<PlayerService>();
+builder.Services.AddSingleton<MatchEventService>();
 
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("DevClient", policy =>
-        policy.WithOrigins("http://localhost:5173")
+        policy.WithOrigins("http://localhost:5173", "http://localhost:5174")
               .AllowAnyHeader()
               .AllowAnyMethod());
 });

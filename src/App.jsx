@@ -4,6 +4,7 @@ import AppShell from "./components/AppShell";
 import OverviewPanel from "./components/OverviewPanel";
 import SquadPanel from "./components/SquadPanel";
 import StandardsPanel from "./components/StandardsPanel";
+import VideoCodingPanel from "./components/VideoCodingPanel";
 
 export default function App() {
   const [activeTab, setActiveTab] = useState("overview");
@@ -71,6 +72,10 @@ export default function App() {
 
       {activeTab === "standards" && (
         <StandardsPanel teamKpis={roversData?.team_kpis} />
+      )}
+
+      {activeTab === "video-coding" && (
+        <VideoCodingPanel players={playersAll} />
       )}
     </AppShell>
   );

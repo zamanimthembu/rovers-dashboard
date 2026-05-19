@@ -20,14 +20,16 @@ import {
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import GroupIcon from "@mui/icons-material/Group";
 import TrackChangesIcon from "@mui/icons-material/TrackChanges";
+import VideoLibraryIcon from "@mui/icons-material/VideoLibrary";
 import MenuIcon from "@mui/icons-material/Menu";
 
 const SIDEBAR_WIDTH = 232;
 
 const NAV_ITEMS = [
-  { id: "overview",   label: "Overview",        icon: <DashboardIcon fontSize="small" /> },
-  { id: "squad",      label: "Squad",           icon: <GroupIcon fontSize="small" /> },
-  { id: "standards",  label: "Team Standards",  icon: <TrackChangesIcon fontSize="small" /> },
+  { id: "overview",      label: "Overview",        icon: <DashboardIcon fontSize="small" /> },
+  { id: "squad",         label: "Squad",           icon: <GroupIcon fontSize="small" /> },
+  { id: "standards",     label: "Team Standards",  icon: <TrackChangesIcon fontSize="small" /> },
+  { id: "video-coding",  label: "Video Coding",    icon: <VideoLibraryIcon fontSize="small" /> },
 ];
 
 function SidebarContent({ activeTab, onTabChange }) {
