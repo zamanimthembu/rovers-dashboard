@@ -34,7 +34,7 @@ const NAV_ITEMS = [
   { id: "video-coding",  label: "Video Coding",    icon: <VideoLibraryIcon fontSize="small" /> },
 ];
 
-function SidebarContent({ activeTab, onTabChange, onLogout }) {
+function SidebarContent({ activeTab, onTabChange, onLogout, currentUser }) {
   return (
     <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
       {/* Branding */}
@@ -140,26 +140,74 @@ function SidebarContent({ activeTab, onTabChange, onLogout }) {
 
       <Divider sx={{ borderColor: "rgba(255,255,255,0.06)" }} />
 
-      {/* Footer */}
-      <Box sx={{ px: 2.5, py: 2, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+      {/* User card + footer */}
+      {currentUser && (
+        <Box
+          sx={{
+            mx: 1.5,
+            mb: 1.5,
+            p: 1.5,
+            borderRadius: 2,
+            bgcolor: "rgba(255,255,255,0.04)",
+            border: "1px solid rgba(255,255,255,0.06)",
+          }}
+        >
+          <Box sx={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 1 }}>
+            <Box sx={{ minWidth: 0 }}>
+              <Typography
+                sx={{
+                  fontSize: "0.8rem",
+                  fontWeight: 700,
+                  color: "#f7f9fc",
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                }}
+              >
+                {currentUser.name}
+              </Typography>
+              <Typography sx={{ fontSize: "0.7rem", color: "#5a7aaa", mt: 0.2 }}>
+                {currentUser.role}
+              </Typography>
+              <Box
+                sx={{
+                  display: "inline-block",
+                  mt: 0.75,
+                  px: 0.75,
+                  py: 0.2,
+                  borderRadius: 1,
+                  bgcolor: "rgba(198,40,40,0.12)",
+                  border: "1px solid rgba(198,40,40,0.25)",
+                }}
+              >
+                <Typography sx={{ fontSize: "0.58rem", fontWeight: 700, color: "#c62828", letterSpacing: 0.6, textTransform: "uppercase" }}>
+                  Stakeholder Preview
+                </Typography>
+              </Box>
+            </Box>
+            <Tooltip title="Sign out" placement="right">
+              <IconButton
+                onClick={onLogout}
+                size="small"
+                sx={{ color: "#3d5a80", flexShrink: 0, "&:hover": { color: "#c62828", bgcolor: "rgba(198,40,40,0.1)" } }}
+              >
+                <LogoutIcon sx={{ fontSize: 15 }} />
+              </IconButton>
+            </Tooltip>
+          </Box>
+        </Box>
+      )}
+
+      <Box sx={{ px: 2.5, pb: 2 }}>
         <Typography sx={{ fontSize: "0.65rem", color: "#3d5a80", letterSpacing: 0.4 }}>
           INF4017W · UCT IS · 2026
         </Typography>
-        <Tooltip title="Sign out" placement="right">
-          <IconButton
-            onClick={onLogout}
-            size="small"
-            sx={{ color: "#3d5a80", "&:hover": { color: "#c62828", bgcolor: "rgba(198,40,40,0.1)" } }}
-          >
-            <LogoutIcon sx={{ fontSize: 16 }} />
-          </IconButton>
-        </Tooltip>
       </Box>
     </Box>
   );
 }
 
-export default function AppShell({ activeTab, onTabChange, matches, selectedMatchId, onMatchChange, onLogout, children }) {
+export default function AppShell({ activeTab, onTabChange, matches, selectedMatchId, onMatchChange, onLogout, currentUser, children }) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -182,7 +230,7 @@ export default function AppShell({ activeTab, onTabChange, matches, selectedMatc
       {/* Sidebar — desktop */}
       {!isMobile && (
         <Drawer variant="permanent" sx={drawerSx}>
-          <SidebarContent activeTab={activeTab} onTabChange={onTabChange} onLogout={onLogout} />
+          <SidebarContent activeTab={activeTab} onTabChange={onTabChange} onLogout={onLogout} currentUser={currentUser} />
         </Drawer>
       )}
 
@@ -198,6 +246,7 @@ export default function AppShell({ activeTab, onTabChange, matches, selectedMatc
             activeTab={activeTab}
             onTabChange={(tab) => { onTabChange(tab); setMobileOpen(false); }}
             onLogout={onLogout}
+            currentUser={currentUser}
           />
         </Drawer>
       )}
@@ -225,12 +274,19 @@ export default function AppShell({ activeTab, onTabChange, matches, selectedMatc
               </IconButton>
             )}
 
-            <Typography
-              variant="subtitle1"
-              sx={{ fontWeight: 700, color: "#f7f9fc", flexGrow: 1, letterSpacing: -0.2 }}
-            >
-              {NAV_ITEMS.find((n) => n.id === activeTab)?.label}
-            </Typography>
+            <Box sx={{ flexGrow: 1, minWidth: 0 }}>
+              <Typography
+                variant="subtitle1"
+                sx={{ fontWeight: 700, color: "#f7f9fc", letterSpacing: -0.2, lineHeight: 1.2 }}
+              >
+                {NAV_ITEMS.find((n) => n.id === activeTab)?.label}
+              </Typography>
+              {currentUser?.purpose && (
+                <Typography sx={{ fontSize: "0.7rem", color: "#5a7aaa", mt: 0.15 }}>
+                  {currentUser.purpose}
+                </Typography>
+              )}
+            </Box>
 
             <FormControl size="small" sx={{ minWidth: 180 }}>
               <Select

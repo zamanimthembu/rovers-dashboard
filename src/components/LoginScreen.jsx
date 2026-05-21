@@ -14,6 +14,7 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { login } from "../services/auth";
 
 export default function LoginScreen({ onLogin }) {
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(false);
@@ -21,7 +22,7 @@ export default function LoginScreen({ onLogin }) {
 
   function handleSubmit(e) {
     e.preventDefault();
-    if (login(password)) {
+    if (login(email, password)) {
       onLogin();
     } else {
       setError(true);
@@ -30,6 +31,20 @@ export default function LoginScreen({ onLogin }) {
       setTimeout(() => setShaking(false), 500);
     }
   }
+
+  function clearError() {
+    setError(false);
+  }
+
+  const fieldSx = (hasError) => ({
+    "& .MuiOutlinedInput-root": {
+      color: "#f7f9fc",
+      bgcolor: "rgba(255,255,255,0.04)",
+      "& fieldset": { borderColor: hasError ? "rgba(198,40,40,0.6)" : "rgba(255,255,255,0.1)" },
+      "&:hover fieldset": { borderColor: hasError ? "rgba(198,40,40,0.8)" : "rgba(255,255,255,0.2)" },
+      "&.Mui-focused fieldset": { borderColor: hasError ? "#c62828" : "rgba(198,40,40,0.6)" },
+    },
+  });
 
   return (
     <Box
@@ -47,7 +62,7 @@ export default function LoginScreen({ onLogin }) {
         elevation={0}
         sx={{
           width: "100%",
-          maxWidth: 400,
+          maxWidth: 420,
           p: { xs: 3.5, sm: 5 },
           bgcolor: "#0d1830",
           border: "1px solid rgba(255,255,255,0.08)",
@@ -67,8 +82,8 @@ export default function LoginScreen({ onLogin }) {
         <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", mb: 4 }}>
           <Box
             sx={{
-              width: 48,
-              height: 48,
+              width: 52,
+              height: 52,
               borderRadius: 2,
               bgcolor: "primary.main",
               display: "flex",
@@ -78,7 +93,7 @@ export default function LoginScreen({ onLogin }) {
               boxShadow: "0 8px 24px rgba(198,40,40,0.35)",
             }}
           >
-            <Typography sx={{ color: "#fff", fontWeight: 900, fontSize: "1rem", letterSpacing: 0.5 }}>
+            <Typography sx={{ color: "#fff", fontWeight: 900, fontSize: "1.05rem", letterSpacing: 0.5 }}>
               CR
             </Typography>
           </Box>
@@ -86,7 +101,7 @@ export default function LoginScreen({ onLogin }) {
           <Typography
             sx={{
               fontWeight: 800,
-              fontSize: "1.15rem",
+              fontSize: "1.2rem",
               color: "#f7f9fc",
               textAlign: "center",
               letterSpacing: -0.3,
@@ -100,7 +115,7 @@ export default function LoginScreen({ onLogin }) {
 
           <Typography
             sx={{
-              fontSize: "0.75rem",
+              fontSize: "0.72rem",
               color: "#5a7aaa",
               mt: 0.75,
               fontWeight: 600,
@@ -108,20 +123,37 @@ export default function LoginScreen({ onLogin }) {
               textTransform: "uppercase",
             }}
           >
-            Secure analyst access
+            Secure stakeholder access
           </Typography>
         </Box>
 
         {/* Form */}
-        <Box component="form" onSubmit={handleSubmit} sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+        <Box
+          component="form"
+          onSubmit={handleSubmit}
+          sx={{ display: "flex", flexDirection: "column", gap: 2 }}
+        >
+          <TextField
+            type="email"
+            label="Email"
+            value={email}
+            onChange={(e) => { setEmail(e.target.value); clearError(); }}
+            fullWidth
+            size="small"
+            autoFocus
+            autoComplete="email"
+            InputLabelProps={{ sx: { color: "#5a7aaa" } }}
+            sx={fieldSx(error)}
+          />
+
           <TextField
             type={showPassword ? "text" : "password"}
             label="Password"
             value={password}
-            onChange={(e) => { setPassword(e.target.value); setError(false); }}
+            onChange={(e) => { setPassword(e.target.value); clearError(); }}
             fullWidth
             size="small"
-            autoFocus
+            autoComplete="current-password"
             InputLabelProps={{ sx: { color: "#5a7aaa" } }}
             InputProps={{
               endAdornment: (
@@ -131,21 +163,16 @@ export default function LoginScreen({ onLogin }) {
                     edge="end"
                     size="small"
                     sx={{ color: "#5a7aaa" }}
+                    tabIndex={-1}
                   >
-                    {showPassword ? <VisibilityOffIcon fontSize="small" /> : <VisibilityIcon fontSize="small" />}
+                    {showPassword
+                      ? <VisibilityOffIcon fontSize="small" />
+                      : <VisibilityIcon fontSize="small" />}
                   </IconButton>
                 </InputAdornment>
               ),
             }}
-            sx={{
-              "& .MuiOutlinedInput-root": {
-                color: "#f7f9fc",
-                bgcolor: "rgba(255,255,255,0.04)",
-                "& fieldset": { borderColor: error ? "rgba(198,40,40,0.6)" : "rgba(255,255,255,0.1)" },
-                "&:hover fieldset": { borderColor: error ? "rgba(198,40,40,0.8)" : "rgba(255,255,255,0.2)" },
-                "&.Mui-focused fieldset": { borderColor: error ? "#c62828" : "rgba(198,40,40,0.6)" },
-              },
-            }}
+            sx={fieldSx(error)}
           />
 
           {error && (
@@ -160,7 +187,7 @@ export default function LoginScreen({ onLogin }) {
                 py: 0.5,
               }}
             >
-              Incorrect password. Please try again.
+              Invalid email or password. Please try again.
             </Alert>
           )}
 
@@ -168,7 +195,7 @@ export default function LoginScreen({ onLogin }) {
             type="submit"
             variant="contained"
             fullWidth
-            disabled={!password}
+            disabled={!email || !password}
             sx={{
               mt: 0.5,
               bgcolor: "primary.main",
@@ -191,13 +218,14 @@ export default function LoginScreen({ onLogin }) {
         <Typography
           sx={{
             mt: 3.5,
-            fontSize: "0.7rem",
+            fontSize: "0.68rem",
             color: "#2d4060",
             textAlign: "center",
-            letterSpacing: 0.2,
+            lineHeight: 1.6,
           }}
         >
-          For authorised coaching and analysis staff only
+          For authorised College Rovers coaching, analysis, player feedback,
+          management, and academic review stakeholders only.
         </Typography>
       </Paper>
     </Box>

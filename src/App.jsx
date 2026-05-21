@@ -6,10 +6,11 @@ import SquadPanel from "./components/SquadPanel";
 import StandardsPanel from "./components/StandardsPanel";
 import VideoCodingPanel from "./components/VideoCodingPanel";
 import LoginScreen from "./components/LoginScreen";
-import { isAuthenticated, logout } from "./services/auth";
+import { isAuthenticated, getCurrentUser, logout } from "./services/auth";
 
 export default function App() {
   const [authed, setAuthed] = useState(isAuthenticated());
+  const [currentUser, setCurrentUser] = useState(getCurrentUser());
   const [activeTab, setActiveTab] = useState("overview");
   const [selectedMatchId, setSelectedMatchId] = useState(MATCHES[0].id);
   const [posFilter, setPosFilter] = useState("ALL");
@@ -52,10 +53,18 @@ export default function App() {
   function handleLogout() {
     logout();
     setAuthed(false);
+    setCurrentUser(null);
   }
 
   if (!authed) {
-    return <LoginScreen onLogin={() => setAuthed(true)} />;
+    return (
+      <LoginScreen
+        onLogin={() => {
+          setAuthed(true);
+          setCurrentUser(getCurrentUser());
+        }}
+      />
+    );
   }
 
   return (
@@ -66,6 +75,7 @@ export default function App() {
       selectedMatchId={selectedMatchId}
       onMatchChange={handleMatchChange}
       onLogout={handleLogout}
+      currentUser={currentUser}
     >
       {activeTab === "overview" && (
         <OverviewPanel
