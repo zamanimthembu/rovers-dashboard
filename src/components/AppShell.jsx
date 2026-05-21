@@ -22,6 +22,8 @@ import GroupIcon from "@mui/icons-material/Group";
 import TrackChangesIcon from "@mui/icons-material/TrackChanges";
 import VideoLibraryIcon from "@mui/icons-material/VideoLibrary";
 import MenuIcon from "@mui/icons-material/Menu";
+import LogoutIcon from "@mui/icons-material/Logout";
+import Tooltip from "@mui/material/Tooltip";
 
 const SIDEBAR_WIDTH = 232;
 
@@ -32,7 +34,7 @@ const NAV_ITEMS = [
   { id: "video-coding",  label: "Video Coding",    icon: <VideoLibraryIcon fontSize="small" /> },
 ];
 
-function SidebarContent({ activeTab, onTabChange }) {
+function SidebarContent({ activeTab, onTabChange, onLogout }) {
   return (
     <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
       {/* Branding */}
@@ -139,16 +141,25 @@ function SidebarContent({ activeTab, onTabChange }) {
       <Divider sx={{ borderColor: "rgba(255,255,255,0.06)" }} />
 
       {/* Footer */}
-      <Box sx={{ px: 2.5, py: 2 }}>
+      <Box sx={{ px: 2.5, py: 2, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <Typography sx={{ fontSize: "0.65rem", color: "#3d5a80", letterSpacing: 0.4 }}>
           INF4017W · UCT IS · 2026
         </Typography>
+        <Tooltip title="Sign out" placement="right">
+          <IconButton
+            onClick={onLogout}
+            size="small"
+            sx={{ color: "#3d5a80", "&:hover": { color: "#c62828", bgcolor: "rgba(198,40,40,0.1)" } }}
+          >
+            <LogoutIcon sx={{ fontSize: 16 }} />
+          </IconButton>
+        </Tooltip>
       </Box>
     </Box>
   );
 }
 
-export default function AppShell({ activeTab, onTabChange, matches, selectedMatchId, onMatchChange, children }) {
+export default function AppShell({ activeTab, onTabChange, matches, selectedMatchId, onMatchChange, onLogout, children }) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -171,7 +182,7 @@ export default function AppShell({ activeTab, onTabChange, matches, selectedMatc
       {/* Sidebar — desktop */}
       {!isMobile && (
         <Drawer variant="permanent" sx={drawerSx}>
-          <SidebarContent activeTab={activeTab} onTabChange={onTabChange} />
+          <SidebarContent activeTab={activeTab} onTabChange={onTabChange} onLogout={onLogout} />
         </Drawer>
       )}
 
@@ -186,6 +197,7 @@ export default function AppShell({ activeTab, onTabChange, matches, selectedMatc
           <SidebarContent
             activeTab={activeTab}
             onTabChange={(tab) => { onTabChange(tab); setMobileOpen(false); }}
+            onLogout={onLogout}
           />
         </Drawer>
       )}

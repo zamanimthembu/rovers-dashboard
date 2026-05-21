@@ -12,6 +12,11 @@ dist
 dist-ssr
 *.local
 
+# Environment variables — never commit real passwords
+.env
+.env.local
+.env.*.local
+
 # .NET build output
 Rovers.API/bin/
 Rovers.API/obj/
