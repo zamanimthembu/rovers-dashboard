@@ -1,17 +1,28 @@
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using Rovers.API.Data;
 using Rovers.API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(o =>
+        o.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 builder.Services.AddOpenApi();
 
 builder.Services.AddDbContext<RoversDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// Legacy in-memory service (kept for backward compatibility)
 builder.Services.AddSingleton<PlayerService>();
+
+// DB-backed services
 builder.Services.AddScoped<MatchEventService>();
+builder.Services.AddScoped<SeasonService>();
+builder.Services.AddScoped<MatchService>();
+builder.Services.AddScoped<PlayerProfileService>();
+builder.Services.AddScoped<EventTypeService>();
+builder.Services.AddScoped<AnalyticsService>();
 
 builder.Services.AddCors(options =>
 {
@@ -22,6 +33,14 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
+
+// Seed initial data
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<RoversDbContext>();
+    db.Database.Migrate();
+    DbSeeder.Seed(db);
+}
 
 if (app.Environment.IsDevelopment())
 {

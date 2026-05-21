@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Rovers.API.Data;
 
@@ -11,9 +12,11 @@ using Rovers.API.Data;
 namespace Rovers.API.Migrations
 {
     [DbContext(typeof(RoversDbContext))]
-    partial class RoversDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260521124029_ExpandPerformanceAnalyticsSchema")]
+    partial class ExpandPerformanceAnalyticsSchema
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
