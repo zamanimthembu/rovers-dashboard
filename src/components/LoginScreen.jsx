@@ -136,12 +136,13 @@ export default function LoginScreen({ onLogin }) {
           <TextField
             type="email"
             label="Email"
+            name="email"
             value={email}
             onChange={(e) => { setEmail(e.target.value); clearError(); }}
             fullWidth
             size="small"
             autoFocus
-            autoComplete="email"
+            autoComplete="username"
             InputLabelProps={{ sx: { color: "#5a7aaa" } }}
             sx={fieldSx(error)}
           />
@@ -149,6 +150,7 @@ export default function LoginScreen({ onLogin }) {
           <TextField
             type={showPassword ? "text" : "password"}
             label="Password"
+            name="password"
             value={password}
             onChange={(e) => { setPassword(e.target.value); clearError(); }}
             fullWidth
