@@ -48,6 +48,15 @@ const STAKEHOLDER_ACCOUNTS = [
   },
 ];
 
+export function getStakeholderAccounts() {
+  return STAKEHOLDER_ACCOUNTS.map(({ name, email, role, purpose }) => ({
+    name,
+    email,
+    role,
+    purpose,
+  }));
+}
+
 export function login(email, password) {
   const account = STAKEHOLDER_ACCOUNTS.find(
     (a) => a.email.toLowerCase() === email.trim().toLowerCase()
