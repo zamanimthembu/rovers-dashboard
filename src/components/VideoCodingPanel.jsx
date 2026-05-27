@@ -108,6 +108,7 @@ export default function VideoCodingPanel({ players }) {
 
     try {
       const created = await createMatchEvent({
+        match_id: 1,
         player_name: playerName,
         event_type: eventType,
         match_time: matchTime,

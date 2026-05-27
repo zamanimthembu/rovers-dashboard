@@ -4,6 +4,9 @@ namespace Rovers.API.Models
 {
     public class MatchEventDto
     {
+        [JsonPropertyName("match_id")]
+        public int? MatchId { get; set; }
+
         [JsonPropertyName("player_name")]
         public string PlayerName { get; set; } = "";
 

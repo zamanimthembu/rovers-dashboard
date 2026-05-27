@@ -20,14 +20,28 @@ namespace Rovers.API.Services
 
         public async Task<MatchEvent> AddAsync(MatchEventDto dto)
         {
+            // Resolve Player FK — match on FullName or ShortName
+            var player = await _db.Players
+                .FirstOrDefaultAsync(p =>
+                    p.FullName == dto.PlayerName ||
+                    p.ShortName == dto.PlayerName);
+
+            // Resolve EventType FK — match on Name
+            var eventType = await _db.EventTypes
+                .FirstOrDefaultAsync(et => et.Name == dto.EventType);
+
             var matchEvent = new MatchEvent
             {
-                PlayerName = dto.PlayerName,
-                EventType = dto.EventType,
-                MatchTime = dto.MatchTime,
-                Notes = dto.Notes,
-                CreatedAt = DateTime.UtcNow,
+                MatchId      = dto.MatchId ?? 1,
+                PlayerId     = player?.Id,
+                EventTypeId  = eventType?.Id,
+                PlayerName   = dto.PlayerName,
+                EventType    = dto.EventType,
+                MatchTime    = dto.MatchTime,
+                Notes        = dto.Notes,
+                CreatedAt    = DateTime.UtcNow,
             };
+
             _db.MatchEvents.Add(matchEvent);
             await _db.SaveChangesAsync();
             return matchEvent;
