@@ -2,9 +2,9 @@ import { useState } from "react";
 import {
   Box,
   Divider,
-  Drawer,
   IconButton,
   Paper,
+  SwipeableDrawer,
   Typography,
   useMediaQuery,
   useTheme,
@@ -98,10 +98,12 @@ export default function SquadPanel({ players, posFilter, onPosFilterChange }) {
 
       {/* Temporary drawer — mobile / tablet only, not mounted on desktop */}
       {!isDesktop && (
-        <Drawer
+        <SwipeableDrawer
           anchor="right"
           open={!!selectedPlayer}
           onClose={handleClear}
+          onOpen={() => {}}
+          disableSwipeToOpen
           PaperProps={{
             sx: {
               width: { xs: "100vw", sm: 460 },
@@ -150,7 +152,7 @@ export default function SquadPanel({ players, posFilter, onPosFilterChange }) {
           <Box sx={{ p: 2.5, overflowY: "auto", flex: 1 }}>
             <PlayerDetails player={selectedPlayer} onClearSelection={handleClear} />
           </Box>
-        </Drawer>
+        </SwipeableDrawer>
       )}
     </>
   );
